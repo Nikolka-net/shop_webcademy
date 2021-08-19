@@ -44,4 +44,17 @@ export function renderProducts(productsArray) {
 		// добавл. на стр. товары
 		elements.productsContainer.insertAdjacentHTML('beforeend', productHTML);
 	})
-};
+}
+
+// Приним. продукт для отображения знач. счётчика
+export function updateCounter(product) {
+
+	// Находим на стр. блок с продуктом
+	const counterWrapper = document.querySelector(`[data-id="${product.id}"]`);
+
+	// Находим div с числом счётчика
+	const counterElement = counterWrapper.querySelector('[data-counter]');
+
+	// Обновляем знач. в разметке
+	counterElement.innerText = product.counter;
+}
