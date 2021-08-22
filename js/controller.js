@@ -5,12 +5,16 @@ import ProductsModel from './products/model.js';
 
 import CartModel from './cart/model.js'; // импорт модели корзины
 
-import * as productsView from './products/view.js'; // импорт всего из view.js
+import * as productsView from './products/view.js'; // импорт всего из product/view.js
+
+import * as cartView from './cart/view.js'; // импорт всего из cart/view.js
 
 // Объекты
 const productsModel = new ProductsModel();
 
 const cartModel = new CartModel();
+
+// const cartView = new CartView();
 
 
 // Асинхронная ф-я
@@ -47,6 +51,7 @@ productsView.elements.productsContainer.addEventListener('click', function (even
 
 	}
 
+	// Добавление товара в корзину
 	if (action === 'add-to-cart') {
 
 		const productId = getProductId();
@@ -56,6 +61,15 @@ productsView.elements.productsContainer.addEventListener('click', function (even
 
 		// Добавляем товар в корзину - данные
 		cartModel.addToCart(product);
+
+		// Отображение товара на стр. в корзине - VEIW
+		cartView.renderCart(cartModel.cart);
+
+		// Сбросить коли-во товара в каталоге на 1
+		productsModel.resetCounter(product);
+
+		// Обновляем счётчик товара на стр.
+		productsView.updateCounter(product);
 
 	}
 });

@@ -43,4 +43,9 @@ export default class Model {
 		return this.products.find((item) => item.id === id) // возврат эл. с нужным id
 
 	}
+
+	// Сброс счётчика в каталоге товара на 1
+	resetCounter(product) {
+		product.counter = 1;
+	}
 }
