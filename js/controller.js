@@ -16,8 +16,6 @@ const productsModel = new ProductsModel();
 
 const cartModel = new CartModel();
 
-// const cartView = new CartView();
-
 
 // Асинхронная ф-я
 // 1. Получение товаров из JSON файла
@@ -27,9 +25,19 @@ async function getAndRenderProducts() {
 
 	// Добавл. для отображения товары из JSON из model.js
 	productsView.renderProducts(productsModel.products);
+
+	// Отображение товаров в корзине, в том числе из localStorage, если есть
+	cartView.renderCart(cartModel.cart);
+
+	// Пересчёт общей стоимости заказа в корзине
+	const totalPrice = cartModel.getTotalCartPrice();
+
+	// Обновляем и вставляем цену на стр.
+	cartView.updateOrderPrice(totalPrice);
 }
 getAndRenderProducts();
 
+// При клике на плюс, минус, кнопку "в корзину"
 productsView.elements.productsContainer.addEventListener('click', function (event) {
 
 	// Записываем совершаемое действие
@@ -73,9 +81,6 @@ productsView.elements.productsContainer.addEventListener('click', function (even
 		// Обновляем счётчик товара на стр.
 		productsView.updateCounter(product);
 
-		// Обновить стоимость заказа
-		console.log(cartModel.getTotalCartPrice());
-
 		// Пересчёт общей стоимости заказа в корзине
 		const totalPrice = cartModel.getTotalCartPrice();
 
@@ -84,3 +89,42 @@ productsView.elements.productsContainer.addEventListener('click', function (even
 
 	}
 });
+
+// При клике на кнопки в корзине
+cartView.elements.cartWrapper.addEventListener('click', function (event) {
+
+	// Записываем совершаемое действие
+	let action = event.target.dataset.action;
+
+	// Находим id товара по родителю с классом cart-item, перевод в цифры из строки
+	function getProductIdInCart() {
+		return +event.target.closest('.cart-item').dataset.id;
+	}
+
+
+	// Клик по счётчику внутри корзины
+	if (action === 'plus' || action === 'minus') {
+		// Находим id продукта в корзине
+		const productId = getProductIdInCart();
+
+		// Запуск метода в модели корзины для изм. счётчика
+		const product = cartModel.updateCounterInCart(productId, action);
+
+		if (product.counter > 0) {
+			// Обновляем счётчик в корзине на стр.
+			cartView.updateCounter(product);
+
+		} else {
+			// Удаляем товар в корзине на стр.
+			cartView.removeItemFromCart(product);
+		}
+
+		// Пересчёт общей стоимости заказа в корзине
+		const totalPrice = cartModel.getTotalCartPrice();
+
+		// Обновляем и вставляем цену на стр.
+		cartView.updateOrderPrice(totalPrice);
+
+	}
+
+})

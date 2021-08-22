@@ -72,3 +72,31 @@ export function updateOrderPrice(price) {
 	// Вставляем цену, предвари-но отформатировав её
 	elements.totalPrice.innerText = new Intl.NumberFormat().format(price);
 }
+
+// Обновляем счётчик в корзине
+
+
+function findProductWrapper(product) { // находим товар по id
+	return elements.cartWrapper.querySelector(`[data-id="${product.id}"]`);
+}
+
+export function updateCounter(product) {
+
+	// Находим товар по id
+	const productWrapper = findProductWrapper(product);
+
+	// Находим счётчик
+	const counterElement = productWrapper.querySelector('[data-counter]');
+
+	counterElement.innerText = product.counter; // запис. туда значение счётчика
+
+}
+
+// Удаляем товар в корзине
+export function removeItemFromCart(product) {
+
+	// Находим товар по id
+	const productWrapper = findProductWrapper(product);
+	productWrapper.remove(); // удаляем товар
+	toggleCart(); // скрытие, показ "корзина пуста", форма заказа
+}
