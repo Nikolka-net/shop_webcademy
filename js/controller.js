@@ -9,6 +9,8 @@ import * as productsView from './products/view.js'; // импорт всего �
 
 import * as cartView from './cart/view.js'; // импорт всего из cart/view.js
 
+
+
 // Объекты
 const productsModel = new ProductsModel();
 
@@ -70,6 +72,15 @@ productsView.elements.productsContainer.addEventListener('click', function (even
 
 		// Обновляем счётчик товара на стр.
 		productsView.updateCounter(product);
+
+		// Обновить стоимость заказа
+		console.log(cartModel.getTotalCartPrice());
+
+		// Пересчёт общей стоимости заказа в корзине
+		const totalPrice = cartModel.getTotalCartPrice();
+
+		// Обновляем и вставляем цену на стр.
+		cartView.updateOrderPrice(totalPrice);
 
 	}
 });

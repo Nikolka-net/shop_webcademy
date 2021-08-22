@@ -23,8 +23,17 @@ export default class Model {
 			const newProduct = JSON.parse(JSON.stringify(product)); // превр. строчку снова в объект, он новый, отличный от объекта в массиве. Иначе в корзине ссылки на один и тот же объект.
 			this.cart.push(newProduct); // пушим новый объект в массив корзины
 		}
-		console.log('this.cart: ', this.cart);
 
 	}
 
+	// Пересчёт общей стоимости
+	getTotalCartPrice() {
+
+		let totalPrice = 0; // общая цена
+
+		this.cart.forEach(function (item) {
+			totalPrice = totalPrice + (item.price * item.counter); // складыв. цены с учётом счётчика
+		})
+		return totalPrice
+	}
 }

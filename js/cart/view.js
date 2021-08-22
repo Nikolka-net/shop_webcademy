@@ -36,7 +36,7 @@ export function renderCart(product) {
 						</div>
 
 						<div class="price">
-							<div class="price__currency">${item.price}</div>
+							<div class="price__currency">${item.price} ₽</div>
 						</div>
 					</div>
 					<!-- // cart-item__details -->
@@ -45,8 +45,30 @@ export function renderCart(product) {
 		 </div>
 	 `;
 
-	 cartHTML = cartHTML + cartItemHTML; // добавл. то что было + новый товар
+		cartHTML = cartHTML + cartItemHTML; // добавл. то что было + новый товар
 	})
 
 	elements.cartWrapper.innerHTML = cartHTML; // добавл. разметку корзины на стр.
+
+	toggleCart();
+}
+
+// Скрытие, показ блоков на стр.: "корзина пуста", "форма отправка заказа"
+function toggleCart() {
+
+	if (elements.cartWrapper.children.length > 0) { // если в корзине есть дочер. эл, не пуста
+		elements.cartEmptyBadge.classList.add('none'); // скрытие бейджа "корзина пуста"
+		elements.orderForm.classList.remove('none'); // показ блока с формой заказа
+	} else {
+		elements.cartEmptyBadge.classList.remove('none'); // скрытие бейджа "корзина пуста"
+		elements.orderForm.classList.add('none'); // показ блока с формой заказа
+
+	}
+}
+
+// Обновление общей стоимости заказа в корзине
+export function updateOrderPrice(price) {
+
+	// Вставляем цену, предвари-но отформатировав её
+	elements.totalPrice.innerText = new Intl.NumberFormat().format(price);
 }
